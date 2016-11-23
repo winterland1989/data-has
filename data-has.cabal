@@ -9,8 +9,13 @@ maintainer:          winterland1989@gmail.com
 -- copyright:           
 category:            Data
 build-type:          Simple
-extra-source-files:  ChangeLog.md
+extra-source-files:  README.md
 cabal-version:       >=1.10
+homepage:           https://github.com/winterland1989/data-has
+
+source-repository head
+  type:     git
+  location: git://github.com/winterland1989/data-has.git
 
 library
   exposed-modules:      Data.Has
