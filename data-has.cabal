@@ -9,7 +9,7 @@ maintainer:          winterland1989@gmail.com
 -- copyright:           
 category:            Data
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  README.md, CHANGELOG
 cabal-version:       >=1.10
 homepage:           https://github.com/winterland1989/data-has
 
