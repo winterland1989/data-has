@@ -12,10 +12,10 @@ A simple extensible product system, a typical usage is to free you from consider
  -- in some library code
  ...
  logInAnyReaderHasLogger :: (Has Logger r, MonadReader r m) => LogString -> m ()
- logInAnyReaderHasLogger s = asks get >>= logWithLogger s
+ logInAnyReaderHasLogger s = asks getter >>= logWithLogger s
 
  queryInAnyReaderHasSQL :: (Has SqlBackEnd r, MonadReader r m) => Query -> m a
- queryInAnyReaderHasSQL q = asks get >>= queryWithSQL q
+ queryInAnyReaderHasSQL q = asks getter >>= queryWithSQL q
  ...
 
  -- now you want to use these effects together
