@@ -1,3 +1,7 @@
+# v0.2.1.0
+
+* Fix benchmarks.
+
 # v0.2.0.0
 
 * Change `get/modify` to `getter/modifier` to reduce naming collision, namely `get/modify` would collide with `MonadState`.
