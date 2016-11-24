@@ -46,8 +46,8 @@ main = defaultMain
 
 hasReader :: (Has Int r, Has String r) => Reader r String
 hasReader = do
-    i :: Int <- asks get
-    s :: String <- asks get
+    i :: Int <- asks getter
+    s :: String <- asks getter
     return (s ++ show i)
 
 multiReader :: ReaderT Int (Reader String) String
@@ -68,14 +68,14 @@ hasReader8 :: ( Has (T 1 Int) r
               , Has (T 8 Int) r
               ) => Reader r Int
 hasReader8 = do
-    i1 :: T 1 Int <- asks get
-    i2 :: T 2 Int <- asks get
-    i3 :: T 3 Int <- asks get
-    i4 :: T 4 Int <- asks get
-    i5 :: T 5 Int <- asks get
-    i6 :: T 6 Int <- asks get
-    i7 :: T 7 Int <- asks get
-    i8 :: T 8 Int <- asks get
+    i1 :: T 1 Int <- asks getter
+    i2 :: T 2 Int <- asks getter
+    i3 :: T 3 Int <- asks getter
+    i4 :: T 4 Int <- asks getter
+    i5 :: T 5 Int <- asks getter
+    i6 :: T 6 Int <- asks getter
+    i7 :: T 7 Int <- asks getter
+    i8 :: T 8 Int <- asks getter
     return (uT i1 + uT i2 + uT i3 + uT i4 + uT i5 + uT i6 + uT i7 + uT i8)
 
 multiReader8 :: ReaderT Int
