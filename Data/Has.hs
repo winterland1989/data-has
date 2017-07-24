@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RankNTypes #-}
 
 {-|
 Module      : Data.Has
@@ -64,7 +65,12 @@ may lead to type inference failure, you simply need type annotations in these ca
 
 -}
 
-module Data.Has where
+module Data.Has (Has(..)) where
+
+import Data.Functor.Const
+import Data.Functor.Identity
+
+type Lens t a = forall f. Functor f => (a -> f a) -> t -> f t
 
 -- | A type class for extensible product.
 --
@@ -72,8 +78,15 @@ module Data.Has where
 -- You can define your own instance of 'Has', but most of the time tuples will do fine.
 --
 class Has a t where
+    {-# MINIMAL getter, modifier | hasL #-}
     getter :: t -> a
+    getter = getConst . hasL Const
+
     modifier :: (a -> a) -> t -> t
+    modifier f t = runIdentity (hasL (Identity . f) t)
+
+    hasL :: Lens t a
+    hasL afa t = (\a -> modifier (const a) t) <$> afa (getter t)
 
 instance Has a a where
     getter = id
