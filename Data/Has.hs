@@ -1,6 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE CPP #-}
 
 {-|
 Module      : Data.Has
@@ -84,15 +85,15 @@ type Lens t a = forall f. Functor f => (a -> f a) -> t -> f t
 -- You can define your own instance of 'Has', but most of the time tuples will do fine.
 --
 class Has a t where
-    {-# MINIMAL getter, modifier | hasL #-}
+    {-# MINIMAL getter, modifier | hasLens #-}
     getter :: t -> a
-    getter = getConst . hasL Const
+    getter = getConst . hasLens Const
 
     modifier :: (a -> a) -> t -> t
-    modifier f t = runIdentity (hasL (Identity . f) t)
+    modifier f t = runIdentity (hasLens (Identity . f) t)
 
-    hasL :: Lens t a
-    hasL afa t = (\a -> modifier (const a) t) <$> afa (getter t)
+    hasLens :: Lens t a
+    hasLens afa t = (\a -> modifier (const a) t) <$> afa (getter t)
 
 instance Has a a where
     getter = id
