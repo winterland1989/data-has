@@ -67,8 +67,14 @@ may lead to type inference failure, you simply need type annotations in these ca
 
 module Data.Has (Has(..)) where
 
-import Data.Functor.Const
+import Data.Functor
 import Data.Functor.Identity
+
+#if MIN_VERSION_base(4,9,0)
+import Data.Functor.Const
+#else
+import Data.Functor.Const.Compat
+#endif
 
 type Lens t a = forall f. Functor f => (a -> f a) -> t -> f t
 
