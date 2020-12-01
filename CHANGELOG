@@ -1,3 +1,8 @@
+# v0.4.0.0
+
+* Add `:*:` type operator and pattern synonym for tuple.
+* Drop GHC < 7.10 support.
+
 # v0.3.0.0
 
 * Add `hasLens`, thanks @pavelkogan!
@@ -9,5 +14,4 @@
 # v0.2.0.0
 
 * Change `get/modify` to `getter/modifier` to reduce naming collision, namely `get/modify` would collide with `MonadState`.
-
 * Add tuple instances up to 12 elements.

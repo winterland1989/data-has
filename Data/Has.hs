@@ -1,7 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE TypeOperators #-}
 
 {-|
 Module      : Data.Has
@@ -64,20 +65,33 @@ may lead to type inference failure, you simply need type annotations in these ca
 
 @ ... (3 :: Int, "hello" :: String, ...) @
 
+This module also provide infix type operator and pattern synonym of tuple, i.e. inductive procducts,
+which is more convenient to write. An overlapping instance prefer first(left) one is provided:
+
+@
+> getter (True :*: "hello" :*: 1) :: Integer
+> 1
+> getter (1 :*: 2 :*: 3) :: Integer
+> 1
+@
+
 -}
 
-module Data.Has (Has(..)) where
+module Data.Has where
 
-import Data.Functor
-import Data.Functor.Identity
-
-#if MIN_VERSION_base(4,9,0)
-import Data.Functor.Const
-#else
-import Data.Functor.Const.Compat
-#endif
+import Data.Functor.Identity ( Identity(Identity, runIdentity) )
+import Control.Applicative ( Const(Const, getConst) )
 
 type Lens t a = forall f. Functor f => (a -> f a) -> t -> f t
+
+-- | Infix version of tuple(right associative).
+type a :*: b = (a, b)
+
+-- | Infix pattern alias for tuple(right associative).
+pattern (:*:) :: a -> b -> (a, b)
+pattern a :*: b = (a, b)
+
+infixr 1 :*:
 
 -- | A type class for extensible product.
 --
@@ -101,15 +115,16 @@ instance Has a a where
     modifier = id
     {-# INLINABLE modifier #-}
 
-instance Has a (a, b) where
+instance {-# OVERLAPPING #-} Has a (a, b) where
     getter (a, _) = a
     {-# INLINABLE getter #-}
     modifier f (a, b) = (f a, b)
     {-# INLINABLE modifier #-}
-instance Has b (a, b) where
-    getter (_, b) = b
+
+instance {-# OVERLAPPABLE #-} Has b bs => Has b (a, bs) where
+    getter (_, bs) = getter bs
     {-# INLINABLE getter #-}
-    modifier f (a, b) = (a, f b)
+    modifier f (a, b) = (a, modifier f b)
     {-# INLINABLE modifier #-}
 
 --------------------------------------------------------------------------------
